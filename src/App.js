@@ -1,24 +1,31 @@
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { PublicRoute } from './HOC/PublicRoute';
+import { PrivateRoute } from './HOC/PrivateRoute';
+import { CHAT_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SIGN_UP_ROUTE } from './routes';
+import Home from './components/Home/Home';
+import Login from './components/Login/Login';
+import SignUp from './components/SignUp/SignUp';
+import Chat from './components/Chat/Chat';
+import { useState } from 'react';
 
 function App() {
+
+  const [authnticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    loading ?
+    <h1>Loading</h1> :
+    (<BrowserRouter>
+      <Switch>
+        <PublicRoute path={LOGIN_ROUTE} component={Login} authnticated={authnticated} />
+        <PublicRoute path={SIGN_UP_ROUTE} component={SignUp} authnticated={authnticated} />
+        <PrivateRoute path={CHAT_ROUTE} component={Chat} authnticated={authnticated} />
+        <Route path={HOME_ROUTE} component={Home} exact/>
+      </Switch>
+    </BrowserRouter>)
   );
 }
 
